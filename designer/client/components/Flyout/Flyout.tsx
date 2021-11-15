@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import FocusTrap from "focus-trap-react";
 import { FlyoutContext } from "../../context";
 import { i18n } from "../../i18n";
+import { camelCase } from "../../helpers";
 
 import "./Flyout.scss";
 
@@ -66,13 +67,20 @@ export function Flyout(props) {
     offset,
   } = useFlyoutEffect(props);
 
+  const idPrefix = camelCase(props.title ?? "flyout");
+
   if (!show) {
     return null;
   }
 
   return (
     <FocusTrap>
-      <div className="flyout show" data-testid={`flyout-${offset}`}>
+      <div
+        role="dialog"
+        aria-labelledby={`${idPrefix}-flyout-heading`}
+        className="flyout show"
+        data-testid={`flyout-${offset}`}
+      >
         <div className={`flyout__container ${width}`} style={style}>
           <a
             tabIndex={0}
@@ -86,7 +94,11 @@ export function Flyout(props) {
           <div className="panel panel--flyout">
             <div className="panel-header govuk-!-padding-top-4 govuk-!-padding-left-4">
               {props.title && (
-                <h4 className="govuk-heading-m" data-testid="flyout-heading">
+                <h4
+                  id={`${idPrefix}-flyout-heading`}
+                  className="govuk-heading-m"
+                  data-testid="flyout-heading"
+                >
                   {props.title}
                 </h4>
               )}
