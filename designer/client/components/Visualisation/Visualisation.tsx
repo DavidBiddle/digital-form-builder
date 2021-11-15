@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 
 import { Page } from "../Page";
 import { Lines } from "./Lines";
-import { Minimap } from "./Minimap";
+// import { Minimap } from "./Minimap";
 import { Info } from "./Info";
 import { getLayout, Pos } from "./getLayout";
 import { DataContext } from "../../context";
@@ -62,7 +62,7 @@ export function Visualisation(props: Props) {
 
         {layout && <Info downloadedAt={downloadedAt} updatedAt={updatedAt} />}
 
-        {layout && <Minimap layout={layout} />}
+        {/* {layout && <Minimap layout={layout} />} */}
       </div>
     </>
   );
