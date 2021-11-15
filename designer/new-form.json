@@ -5,6 +5,7 @@
     {
       "title": "First page",
       "path": "/first-page",
+      "controller": "./pages/start.js",
       "components": [],
       "next": [
         {
