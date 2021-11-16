@@ -29,7 +29,7 @@
 
                 {%if declaration %}
                 <h2 class="govuk-heading-m" id="declaration">Declaration</h2>
-                  {{ declaration | safe  }}
+                  <p class="govuk-body">{{ declaration  }}<p>
                   <div class="govuk-form-group {{ 'govuk-form-group--error' if declarationError }}">
                     {% if declarationError %}
                         <span id="nationality-error" class="govuk-error-message">

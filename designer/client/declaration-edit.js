@@ -1,5 +1,6 @@
 import React from "react";
 import Editor from "./editor";
+import { Input } from "@govuk-jsx/input";
 import { clone } from "@xgovformbuilder/model";
 
 import { DataContext } from "./context";
@@ -67,15 +68,20 @@ class DeclarationEdit extends React.Component {
           </div>
 
           <div className="govuk-form-group">
-            <label className="govuk-label" htmlFor="declaration">
-              Declaration
-            </label>
-            <span className="govuk-hint">
-              The declaration can include HTML and the `govuk-prose-scope` css
-              class is available. Use this on a wrapping element to apply
-              default govuk styles.
-            </span>
-            <Editor name="declaration" value={declaration} />
+            <Input
+              id="declaration"
+              name="declaration"
+              label={{
+                className: "govuk-label--s",
+                children: ["Declaration"],
+              }}
+              hint={{
+                children: [
+                  "The declaration will be displayed at the bottom of the Summary page.",
+                ],
+              }}
+              defaultValue={declaration}
+            />
           </div>
 
           <button className="govuk-button" type="submit">
