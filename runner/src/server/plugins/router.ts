@@ -1,7 +1,7 @@
 import Joi from "joi";
 import Url from "url-parse";
 import { redirectTo } from "./engine";
-import { publicRoutes, healthCheckRoute } from "../routes";
+import { healthCheckRoute, publicRoutes } from "../routes";
 import { HapiRequest, HapiResponseToolkit } from "../types";
 
 const routes = [...publicRoutes, healthCheckRoute];
@@ -55,6 +55,7 @@ export default {
             return h.redirect(redirect).state(
               "cookies_policy",
               {
+                isHttpOnly: false, // Set this to false so that Google tag manager can read cookie preferences
                 isSet: true,
                 essential: true,
                 analytics: accept ? "on" : "off",

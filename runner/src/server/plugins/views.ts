@@ -62,7 +62,7 @@ export default {
     context: (request: HapiRequest) => ({
       appVersion: pkg.version,
       assetPath: "/assets",
-      cookiesPolicy: request?.state.cookies_policy,
+      cookiesPolicy: request?.state?.cookies_policy,
       serviceName: capitalize(config.serviceName),
       feedbackLink: config.feedbackLink,
       pageTitle: config.serviceName + " - GOV.UK",
@@ -78,6 +78,9 @@ export default {
       serviceStartPage: config.serviceStartPage || "#",
       privacyPolicyUrl: config.privacyPolicyUrl || "#",
       phaseTag: config.phaseTag,
+      navigation: request?.auth.isAuthenticated
+        ? [{ text: "Sign out", href: "/logout" }]
+        : null,
     }),
   },
 };
