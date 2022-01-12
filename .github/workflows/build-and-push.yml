@@ -13,7 +13,9 @@ jobs:
   build-runner:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       packages: write
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
