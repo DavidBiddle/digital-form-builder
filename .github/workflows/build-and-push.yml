@@ -36,6 +36,7 @@ jobs:
           tags: |
             ${{ env.DOCKER_IMAGE_TAG }}
           push: true
+          file: runner/Dockerfile
           build-args: |
             COMMIT_SHA=$GITHUB_SHA
 
