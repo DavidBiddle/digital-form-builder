@@ -115,6 +115,6 @@ jobs:
           CF_DOCKER_PASSWORD=${{ secrets.GITHUB_TOKEN }} cf push -f ./designer/manifest.yml \
             --docker-image ${{ env.DOCKER_IMAGE_TAG }} \
             --docker-username ${{ github.actor }} \
-            --var FORMS_API_URL ${{ secrets.FORMS_API_URL }} \
-            --var PUBLISH_URL ${{ secrets.PUBLISH_URL }} \
-            --var PREVIEW_URL ${{ secrets.PREVIEW_URL }}
+            --var FORMS_API_URL=${{ secrets.FORMS_API_URL }} \
+            --var PUBLISH_URL=${{ secrets.PUBLISH_URL }} \
+            --var PREVIEW_URL=${{ secrets.PREVIEW_URL }}
