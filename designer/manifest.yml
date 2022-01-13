@@ -1,0 +1,10 @@
+---
+applications:
+  - name: cifu-xgov-designer
+    memory: 256M
+    env:
+      PREVIEW_MODE: true
+      PERSISTENT_BACKEND: api
+      FORMS_API_URL: ((FORMS_API_URL))
+      PUBLISH_URL: ((PUBLISH_URL))
+      PREVIEW_URL: ((PREVIEW_URL))
