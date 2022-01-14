@@ -86,8 +86,10 @@ const componentSchema = joi
     title: localisedString,
     hint: localisedString.optional(),
     options: joi.object().default({}),
-    schema: joi.object().default({}),
-    errors: joi.object({ a: joi.any() }).optional(),
+    schema: joi
+      .object({ min: joi.number(), max: joi.number() })
+      .unknown(true)
+      .default({}),
     list: joi.string(),
   })
   .unknown(true);
@@ -170,12 +172,18 @@ const multiApiKeySchema = joi.object({
   production: joi.string().optional(),
 });
 
+const replyToConfigurationSchema = joi.object({
+  emailReplyToId: joi.string(),
+  condition: joi.string().allow("").optional(),
+});
+
 const notifySchema = joi.object().keys({
   apiKey: [joi.string().allow("").optional(), multiApiKeySchema],
   templateId: joi.string(),
   emailField: joi.string(),
   personalisation: joi.array().items(joi.string()),
   addReferencesToPersonalisation: joi.boolean().optional(),
+  emailReplyToIdConfiguration: joi.array().items(replyToConfigurationSchema),
 });
 
 const emailSchema = joi.object().keys({
