@@ -61,10 +61,20 @@ export const putFormWithId: ServerRoute = {
 
           throw new Error("Schema validation failed, reason: " + error.message);
         }
-        await persistenceService.uploadConfiguration(
-          `${id}`,
-          JSON.stringify(value)
-        );
+
+        if (request.state["user"]) {
+          await persistenceService.uploadConfigurationForUser(
+            `${id}`,
+            JSON.stringify(value),
+            request.state["user"]
+          );
+        } else {
+          await persistenceService.uploadConfiguration(
+            `${id}`,
+            JSON.stringify(value)
+          );
+        }
+
         await publish(id, value);
         return h.response({ ok: true }).code(204);
       } catch (err) {
@@ -89,7 +99,16 @@ export const getAllPersistedConfigurations: ServerRoute = {
     handler: async (request, h): Promise<ResponseObject | undefined> => {
       const { persistenceService } = request.services([]);
       try {
-        const response = await persistenceService.listAllConfigurations();
+        let response;
+
+        if (request.state["user"]) {
+          response = await persistenceService.listAllConfigurationsForUser(
+            request.state["user"]
+          );
+        } else {
+          response = await persistenceService.listAllConfigurations();
+        }
+
         return h.response(response).type("application/json");
       } catch (error) {
         request.server.log(["error", "/configurations"], error);
