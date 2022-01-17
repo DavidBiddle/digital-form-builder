@@ -40,7 +40,7 @@ export class ApiPersistenceService implements PersistenceService {
       configurationId,
       user
     );
-    return this.uploadConfiguration(newName, configuration);
+    return this.uploadConfigurationForUser(newName, configuration, user);
   }
 
   async getConfiguration(id: string) {
