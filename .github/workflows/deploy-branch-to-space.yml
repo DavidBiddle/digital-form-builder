@@ -4,17 +4,16 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: The branch you wish to create a build from
+        description: The branch to create a build from
         required: true
         default: main
       space:
-        description: The space you wish to deploy to
+        description: The space to deploy to
         required: true
         default: sandbox
       environment:
-        description: The space you wish to deploy to
+        description: The environment to deploy with
         required: false
-        default: sandbox
 
 env:
   REGISTRY: ghcr.io
