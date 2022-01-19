@@ -11,12 +11,17 @@ on:
         description: The space you wish to deploy to
         required: true
         default: sandbox
+      environment:
+        description: The space you wish to deploy to
+        required: false
+        default: sandbox
 
 env:
   REGISTRY: ghcr.io
 
 jobs:
   build-runner:
+    environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -73,6 +78,7 @@ jobs:
             --docker-username ${{ github.actor }}
 
   build-designer:
+    environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
