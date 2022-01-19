@@ -15,20 +15,24 @@ function NoMatch() {
 }
 
 function UserChoice() {
-  let [userState, updateUserState] = React.useState("user");
-  let [_, setcookie] = useCookies(["user"]);
+  let [cookies, setcookie] = useCookies(["user"]);
+  let [userState, updateUserState] = React.useState(cookies.user);
 
   let updateUser = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
     setcookie("user", userState, {
       path: "/",
       sameSite: "strict",
     });
+
+    return true;
   };
 
   return (
     <form onSubmit={(e) => updateUser(e)}>
+      <label htmlFor="user-picker">User select: </label>
       <input
+        id="user-picker"
+        name="user-picker"
         type="text"
         onChange={(e) => updateUserState(e.target.value)}
         value={userState}
