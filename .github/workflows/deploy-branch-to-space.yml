@@ -1,15 +1,26 @@
-name: Deploy runner and designer
+name: Deploy branch to space
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      branch:
+        description: The branch to create a build from
+        required: true
+        default: main
+      space:
+        description: The space to deploy to
+        required: true
+        default: sandbox
+      environment:
+        description: The environment to deploy with
+        required: false
 
 env:
   REGISTRY: ghcr.io
 
 jobs:
   build-runner:
+    environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -20,6 +31,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Set environment variables
         run: |
@@ -58,12 +71,13 @@ jobs:
         run: |
           cf api ${{ secrets.CF_API }}
           cf auth "${{ secrets.CF_USER }}" "${{ secrets.CF_PASSWORD }}"
-          cf target -o ${{ secrets.CF_ORGANISATION }} -s ${{ secrets.CF_SPACE }}
-          CF_DOCKER_PASSWORD=${{ secrets.GITHUB_TOKEN }} cf push -f ./runner/manifest.yml \
+          cf target -o ${{ secrets.CF_ORGANISATION }} -s ${{ github.event.inputs.space }}
+          CF_DOCKER_PASSWORD=${{ secrets.GITHUB_TOKEN }} cf push cifu-xgov-runner-${{ github.event.inputs.branch }} -f ./runner/manifest.yml \
             --docker-image ${{ env.DOCKER_IMAGE_TAG }} \
             --docker-username ${{ github.actor }}
 
   build-designer:
+    environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -74,6 +88,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Set environment variables
         run: |
@@ -112,8 +128,8 @@ jobs:
         run: |
           cf api ${{ secrets.CF_API }}
           cf auth "${{ secrets.CF_USER }}" "${{ secrets.CF_PASSWORD }}"
-          cf target -o ${{ secrets.CF_ORGANISATION }} -s ${{ secrets.CF_SPACE }}
-          CF_DOCKER_PASSWORD=${{ secrets.GITHUB_TOKEN }} cf push -f ./designer/manifest.yml \
+          cf target -o ${{ secrets.CF_ORGANISATION }} -s ${{ github.event.inputs.space }}
+          CF_DOCKER_PASSWORD=${{ secrets.GITHUB_TOKEN }} cf push cifu-xgov-designer-${{ github.event.inputs.branch }} -f ./designer/manifest.yml \
             --docker-image ${{ env.DOCKER_IMAGE_TAG }} \
             --docker-username ${{ github.actor }} \
             --var FORMS_API_URL=${{ secrets.FORMS_API_URL }} \
