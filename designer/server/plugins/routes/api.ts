@@ -19,14 +19,14 @@ export const getFormWithId: ServerRoute = {
   options: {
     handler: async (request, h) => {
       const { id } = request.params;
+      const { persistenceService } = request.services([]);
       let formJson = newFormJson;
       try {
-        const response = await getPublished(id);
-        const { values } = JSON.parse(response);
-
-        if (values) {
-          formJson = values;
-        }
+        const response = await persistenceService.getConfigurationForUser(
+          `${id}`,
+          request.state["user"]
+        );
+        formJson = JSON.parse(response);
       } catch (error) {
         request.logger.error(error);
       }
