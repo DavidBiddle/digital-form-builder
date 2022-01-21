@@ -4,7 +4,7 @@ applications:
     memory: 256M
     env:
       PREVIEW_MODE: true
-      PERSISTENT_BACKEND: api
-      FORMS_API_URL: ((FORMS_API_URL))
+      sandbox: true
+      PERSISTENT_BACKEND: s3
       PUBLISH_URL: ((PUBLISH_URL))
       PREVIEW_URL: ((PREVIEW_URL))
