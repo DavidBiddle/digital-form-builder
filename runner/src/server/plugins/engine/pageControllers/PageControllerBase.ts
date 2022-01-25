@@ -217,8 +217,6 @@ export class PageControllerBase {
       defaultLink = link;
       return false;
     });
-    console.log("Next link: ", nextLink);
-    console.log("Default link: ", defaultLink);
     return nextLink?.page ?? defaultLink?.page;
   }
 

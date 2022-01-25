@@ -211,7 +211,6 @@ export const plugin = {
     ) => {
       const { path, id } = request.params;
       const model = await getForm(id, options.formsApiUrl, modelOptions, id);
-      console.log("WOOF??", id);
 
       if (model) {
         const page = model.pages.find(
