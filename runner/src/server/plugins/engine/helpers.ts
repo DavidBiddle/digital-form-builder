@@ -72,6 +72,7 @@ export function redirectTo(
     return h.redirect(targetUrl);
   }
 
+  console.log("QUACK????", targetUrl);
   const url = redirectUrl(request, targetUrl, params);
   return h.redirect(url);
 }
