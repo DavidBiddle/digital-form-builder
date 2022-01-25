@@ -42,7 +42,8 @@ export const registerNewFormWithRunner: ServerRoute = {
             }
           }
 
-          await publish(newName, newFormJson);
+          // Remove publishing for now
+          // await publish(newName, newFormJson);
         } else {
           let copied;
           if (request.state["user"]) {
@@ -62,7 +63,8 @@ export const registerNewFormWithRunner: ServerRoute = {
             );
             copied = await persistenceService.getConfiguration(newName);
           }
-          await publish(newName, copied);
+          // Remove publishing for now
+          // await publish(newName, copied);
         }
       } catch (e) {
         request.logger.error(e);
