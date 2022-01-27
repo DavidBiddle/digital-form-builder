@@ -12,6 +12,16 @@ const getPublished = async function (id) {
   return payload.toString();
 };
 
+export const loginRedirect: ServerRoute = {
+  method: "GET",
+  path: "/api/login",
+  options: {
+    handler: (_, h) => {
+      return h.redirect(`${config.formsApiUrl}/login`);
+    },
+  },
+};
+
 export const getFormWithId: ServerRoute = {
   // GET DATA
   method: "GET",

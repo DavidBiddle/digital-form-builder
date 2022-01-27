@@ -52,6 +52,7 @@ export const designerPlugin = {
       });
 
       server.route(newConfig.registerNewFormWithRunner);
+      server.route(api.loginRedirect);
       server.route(api.getFormWithId);
       server.route(api.putFormWithId);
       server.route(api.getAllPersistedConfigurations);

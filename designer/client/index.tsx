@@ -59,7 +59,7 @@ function useQuery() {
 function AuthProvider({ children }) {
   let [cookies] = useCookies(["user"]);
   if (cookies.user) return children;
-  window.location.href = "http://localhost:4567/login";
+  window.location.href = "/api/login";
 }
 
 function Auth() {
