@@ -17,7 +17,7 @@ export const loginRedirect: ServerRoute = {
   path: "/api/login",
   options: {
     handler: (_, h) => {
-      return h.redirect(`${config.formsApiUrl}/login`);
+      return h.redirect(config.managementUrl);
     },
   },
 };

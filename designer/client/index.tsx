@@ -83,6 +83,22 @@ function Auth() {
   return <Redirect to="/" />;
 }
 
+function Logout() {
+  let [_, __, removeCookie] = useCookies(["user"]);
+
+  let doLogout = (e) => {
+    e.preventDefault();
+    removeCookie("user");
+    window.location.href = "/api/login";
+  };
+
+  return (
+    <a onClick={(e) => doLogout(e)} href="#">
+      Logout
+    </a>
+  );
+}
+
 export class App extends React.Component {
   render() {
     return (
@@ -90,6 +106,7 @@ export class App extends React.Component {
         <CookiesProvider>
           <div id="app">
             <UserChoice />
+            <Logout />
             <Switch>
               <Route path="/auth" exact>
                 <Auth />
