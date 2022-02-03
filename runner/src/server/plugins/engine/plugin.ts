@@ -7,8 +7,10 @@ import { HapiRequest, HapiResponseToolkit, HapiServer } from "server/types";
 import { FormModel } from "./models";
 import Boom from "boom";
 import { PluginSpecificConfiguration } from "@hapi/hapi";
+import Wreck from "@hapi/wreck";
 import { FormPayload } from "./types";
 import { shouldLogin } from "server/plugins/auth";
+import config from "src/server/config";
 
 configure([
   // Configure Nunjucks to allow rendering of content that is revealed conditionally.
@@ -22,6 +24,17 @@ configure([
 
 function normalisePath(path: string) {
   return path.replace(/^\//, "").replace(/\/$/, "");
+}
+
+async function getForm(
+  id: string,
+  formsApiUrl: string,
+  modelOptions,
+  basePath: string
+): Promise<FormModel> {
+  const { payload } = await Wreck.get(`${formsApiUrl}/published/${id}`);
+  var configuration = JSON.parse(payload.toString()).values;
+  return new FormModel(configuration, { ...modelOptions, basePath });
 }
 
 function getStartPageRedirect(
@@ -47,6 +60,7 @@ type PluginOptions = {
   modelOptions: any;
   configs: any[];
   previewMode: boolean;
+  formsApiUrl: string;
 };
 
 export const plugin = {
@@ -64,93 +78,93 @@ export const plugin = {
       });
     });
 
-    if (previewMode) {
-      /**
-       * The following endpoints are used from the designer for operating in 'preview' mode.
-       * I.E. Designs saved in the designer can be accessed in the runner for viewing.
-       * The designer also uses these endpoints as a persistence mechanism for storing and retrieving data
-       * for it's own purposes so if you're changing these endpoints you likely need to go and amend
-       * the designer too!
-       */
-      server.route({
-        method: "post",
-        path: "/publish",
-        handler: (request: HapiRequest, h: HapiResponseToolkit) => {
-          const payload = request.payload as FormPayload;
-          const { id, configuration } = payload;
+    // if (previewMode) {
+    //   /**
+    //    * The following endpoints are used from the designer for operating in 'preview' mode.
+    //    * I.E. Designs saved in the designer can be accessed in the runner for viewing.
+    //    * The designer also uses these endpoints as a persistence mechanism for storing and retrieving data
+    //    * for it's own purposes so if you're changing these endpoints you likely need to go and amend
+    //    * the designer too!
+    //    */
+    //   server.route({
+    //     method: "post",
+    //     path: "/publish",
+    //     handler: (request: HapiRequest, h: HapiResponseToolkit) => {
+    //       const payload = request.payload as FormPayload;
+    //       const { id, configuration } = payload;
 
-          const parsedConfiguration =
-            typeof configuration === "string"
-              ? JSON.parse(configuration)
-              : configuration;
-          forms[id] = new FormModel(parsedConfiguration, {
-            ...modelOptions,
-            basePath: id,
-          });
-          return h.response({}).code(204);
-        },
-      });
+    //       const parsedConfiguration =
+    //         typeof configuration === "string"
+    //           ? JSON.parse(configuration)
+    //           : configuration;
+    //       forms[id] = new FormModel(parsedConfiguration, {
+    //         ...modelOptions,
+    //         basePath: id,
+    //       });
+    //       return h.response({}).code(204);
+    //     },
+    //   });
 
-      server.route({
-        method: "get",
-        path: "/published/{id}",
-        handler: (request: HapiRequest, h: HapiResponseToolkit) => {
-          const { id } = request.params;
-          if (forms[id]) {
-            const { values } = forms[id];
-            return h.response(JSON.stringify({ id, values })).code(200);
-          } else {
-            return h.response({}).code(204);
-          }
-        },
-      });
+    //   server.route({
+    //     method: "get",
+    //     path: "/published/{id}",
+    //     handler: (request: HapiRequest, h: HapiResponseToolkit) => {
+    //       const { id } = request.params;
+    //       if (forms[id]) {
+    //         const { values } = forms[id];
+    //         return h.response(JSON.stringify({ id, values })).code(200);
+    //       } else {
+    //         return h.response({}).code(204);
+    //       }
+    //     },
+    //   });
 
-      server.route({
-        method: "get",
-        path: "/published",
-        handler: (_request: HapiRequest, h: HapiResponseToolkit) => {
-          return h
-            .response(
-              JSON.stringify(
-                Object.keys(forms).map(
-                  (key) =>
-                    new FormConfiguration(
-                      key,
-                      forms[key].name,
-                      undefined,
-                      forms[key].def.feedback?.feedbackForm
-                    )
-                )
-              )
-            )
-            .code(200);
-        },
-      });
-    }
+    //   server.route({
+    //     method: "get",
+    //     path: "/published",
+    //     handler: (_request: HapiRequest, h: HapiResponseToolkit) => {
+    //       return h
+    //         .response(
+    //           JSON.stringify(
+    //             Object.keys(forms).map(
+    //               (key) =>
+    //                 new FormConfiguration(
+    //                   key,
+    //                   forms[key].name,
+    //                   undefined,
+    //                   forms[key].def.feedback?.feedbackForm
+    //                 )
+    //             )
+    //           )
+    //         )
+    //         .code(200);
+    //     },
+    //   });
+    // }
 
-    server.route({
-      method: "get",
-      path: "/",
-      handler: (request: HapiRequest, h: HapiResponseToolkit) => {
-        const keys = Object.keys(forms);
-        let id = "";
-        if (keys.length === 1) {
-          id = keys[0];
-        }
-        const model = forms[id];
-        if (model) {
-          return getStartPageRedirect(request, h, id, model);
-        }
-        throw Boom.notFound("No default form found");
-      },
-    });
+    // server.route({
+    //   method: "get",
+    //   path: "/",
+    //   handler: (request: HapiRequest, h: HapiResponseToolkit) => {
+    //     const keys = Object.keys(forms);
+    //     let id = "";
+    //     if (keys.length === 1) {
+    //       id = keys[0];
+    //     }
+    //     const model = forms[id];
+    //     if (model) {
+    //       return getStartPageRedirect(request, h, id, model);
+    //     }
+    //     throw Boom.notFound("No default form found");
+    //   },
+    // });
 
     server.route({
       method: "get",
       path: "/{id}",
-      handler: (request: HapiRequest, h: HapiResponseToolkit) => {
+      handler: async (request: HapiRequest, h: HapiResponseToolkit) => {
         const { id } = request.params;
-        const model = forms[id];
+        const model = await getForm(id, options.formsApiUrl, modelOptions, id);
         if (model) {
           return getStartPageRedirect(request, h, id, model);
         }
@@ -161,9 +175,9 @@ export const plugin = {
     server.route({
       method: "get",
       path: "/{id}/{path*}",
-      handler: (request: HapiRequest, h: HapiResponseToolkit) => {
+      handler: async (request: HapiRequest, h: HapiResponseToolkit) => {
         const { path, id } = request.params;
-        const model = forms[id];
+        const model = await getForm(id, options.formsApiUrl, modelOptions, id);
         const page = model?.pages.find(
           (page) => normalisePath(page.path) === normalisePath(path)
         );
@@ -196,7 +210,7 @@ export const plugin = {
       h: HapiResponseToolkit
     ) => {
       const { path, id } = request.params;
-      const model = forms[id];
+      const model = await getForm(id, options.formsApiUrl, modelOptions, id);
 
       if (model) {
         const page = model.pages.find(

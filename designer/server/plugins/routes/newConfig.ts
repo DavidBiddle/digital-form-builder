@@ -24,20 +24,47 @@ export const registerNewFormWithRunner: ServerRoute = {
 
       try {
         if (selected.Key === "New") {
-          if (config.persistentBackend !== "preview") {
-            await persistenceService.uploadConfiguration(
-              `${newName}.json`,
-              JSON.stringify(newFormJson)
-            );
+          if (
+            config.persistentBackend !== "preview" &&
+            config.persistentBackend !== "api"
+          ) {
+            if (request.state["user"]) {
+              await persistenceService.uploadConfigurationForUser(
+                `${newName}`,
+                JSON.stringify(newFormJson),
+                request.state["user"]
+              );
+            } else {
+              await persistenceService.uploadConfiguration(
+                `${newName}`,
+                JSON.stringify(newFormJson)
+              );
+            }
           }
-          await publish(newName, newFormJson);
+
+          // Remove publishing for now
+          // await publish(newName, newFormJson);
         } else {
-          await persistenceService.copyConfiguration(
-            `${selected.Key}`,
-            newName
-          );
-          const copied = await persistenceService.getConfiguration(newName);
-          await publish(newName, copied);
+          let copied;
+          if (request.state["user"]) {
+            await persistenceService.copyConfigurationForUser(
+              `${selected.Key}`,
+              newName,
+              request.state["user"]
+            );
+            copied = await persistenceService.getConfigurationForUser(
+              newName,
+              request.state["user"]
+            );
+          } else {
+            await persistenceService.copyConfiguration(
+              `${selected.Key}`,
+              newName
+            );
+            copied = await persistenceService.getConfiguration(newName);
+          }
+          // Remove publishing for now
+          // await publish(newName, copied);
         }
       } catch (e) {
         request.logger.error(e);

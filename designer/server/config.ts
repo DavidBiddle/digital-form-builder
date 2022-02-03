@@ -11,6 +11,7 @@ export interface Config {
   previewUrl: string;
   publishUrl: string;
   formsApiUrl: string;
+  managementUrl: string;
   persistentBackend: "s3" | "blob" | "preview" | "api";
   s3Bucket?: string;
   logLevel: "trace" | "info" | "debug" | "error";
@@ -39,6 +40,7 @@ const schema = joi.object({
   previewUrl: joi.string(),
   publishUrl: joi.string(),
   formsApiUrl: joi.string(),
+  managementUrl: joi.string(),
   persistentBackend: joi
     .string()
     .valid("s3", "blob", "preview", "api")
@@ -63,6 +65,7 @@ const config = {
   previewUrl: process.env.PREVIEW_URL || "http://localhost:3009",
   publishUrl: process.env.PUBLISH_URL || "http://localhost:3009",
   formsApiUrl: process.env.FORMS_API_URL || "http://localhost:4567",
+  managementUrl: process.env.MANAGEMENT_URL || "http://localhost:3030",
   persistentBackend: process.env.PERSISTENT_BACKEND || "preview",
   s3Bucket: process.env.S3_BUCKET,
   logLevel: process.env.LOG_LEVEL || "error",

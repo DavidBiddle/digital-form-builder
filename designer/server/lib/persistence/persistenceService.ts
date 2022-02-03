@@ -6,6 +6,18 @@ export interface PersistenceService {
   getConfiguration(id: string): Promise<string>;
   uploadConfiguration(id: string, configuration: string): Promise<any>;
   copyConfiguration(configurationId: string, newName: string): Promise<any>;
+  listAllConfigurationsForUser(user: string): Promise<FormConfiguration[]>;
+  getConfigurationForUser(id: string, user: string): Promise<string>;
+  uploadConfigurationForUser(
+    id: string,
+    configuration: string,
+    user: string
+  ): Promise<any>;
+  copyConfigurationForUser(
+    configurationId: string,
+    newName: string,
+    user: string
+  ): Promise<any>;
 }
 
 export class StubPersistenceService implements PersistenceService {
@@ -21,6 +33,7 @@ export class StubPersistenceService implements PersistenceService {
   getConfiguration(_id: string) {
     return Promise.resolve("");
   }
+
   copyConfiguration(_configurationId: string, _newName: string) {
     return Promise.resolve("");
   }

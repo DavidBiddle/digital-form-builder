@@ -23,6 +23,7 @@ type ConfigureEnginePlugin = (
       id: string;
     }[];
     previewMode: boolean;
+    formsApiUrl: string;
   };
 };
 
@@ -56,6 +57,11 @@ export const configureEnginePlugin: ConfigureEnginePlugin = (
 
   return {
     plugin,
-    options: { modelOptions, configs, previewMode: config.previewMode },
+    options: {
+      modelOptions,
+      configs,
+      previewMode: config.previewMode,
+      formsApiUrl: config.formsApiUrl,
+    },
   };
 };

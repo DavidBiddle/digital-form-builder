@@ -3541,6 +3541,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/cookie@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "@types/cookie@npm:0.3.3"
+  checksum: 35d603d5e620ed8a0c4dedcf6b6e19e4981a4c44d40402de39e53f041ce74bf66b40272a355db37271b9557709fd3e6dfc8fe6ea4031f59b8b16cf0606ea3797
+  languageName: node
+  linkType: hard
+
 "@types/cookie@npm:^0.4.0":
   version: 0.4.0
   resolution: "@types/cookie@npm:0.4.0"
@@ -3712,6 +3719,16 @@ __metadata:
   version: 4.1.3
   resolution: "@types/hoek@npm:4.1.3"
   checksum: ab7d9ef00fcafc8e3eea70f66889befcf92497b3d7adf65779eb74284a1cb5b8033a6a0ada6ad5da9d9ef710a8deaa064b572957509053f46692d300c39aca0c
+  languageName: node
+  linkType: hard
+
+"@types/hoist-non-react-statics@npm:^3.0.1":
+  version: 3.3.1
+  resolution: "@types/hoist-non-react-statics@npm:3.3.1"
+  dependencies:
+    "@types/react": "*"
+    hoist-non-react-statics: ^3.3.0
+  checksum: 16ab4c45d4920fa378c8be76554b10061247fc04d2c8af11bdb7d520b3967e9c06d7ad5efd9b0f1657fbc4d095f62c6e1325f03b9141eb1ef2c8095b96fd42f8
   languageName: node
   linkType: hard
 
@@ -4024,6 +4041,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react@npm:*":
+  version: 17.0.38
+  resolution: "@types/react@npm:17.0.38"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: b04dcee8a5e530ec22d9d624c76ad198130b29751b28d66678def14d2def8be9c6fc1e3515d4700f23feb765a8eae7e278f27eaf841b006670a41b421c0a6866
+  languageName: node
+  linkType: hard
+
 "@types/react@npm:^16, @types/react@npm:^16.9.52":
   version: 16.14.2
   resolution: "@types/react@npm:16.14.2"
@@ -4049,6 +4077,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: e6e6613c800aeda63e2331e753e8d21df1a2c9aa7a4bc71ed792a848e4811fc96e609759089355314a2318c76eff1f161499cd242044838ab1e6f56e463ebb9c
+  languageName: node
+  linkType: hard
+
+"@types/scheduler@npm:*":
+  version: 0.16.2
+  resolution: "@types/scheduler@npm:0.16.2"
+  checksum: e78d1bb50ca9321a76826c0f5a5ed7f1b6e995597127993cad658bd18d7f7de4324cd7efdfd0140079ee212a05774bbbd95eecfdf72370d14023acb99b841a30
   languageName: node
   linkType: hard
 
@@ -4960,6 +4995,7 @@ __metadata:
     postcss-loader: ^4.1.0
     prismjs: 1.23.0
     react: 16.13.1
+    react-cookie: ^4.1.1
     react-dom: 16.13.1
     react-helmet: ^6.1.0
     react-router-dom: ^5.2.0
@@ -8158,7 +8194,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookie@npm:^0.4.1":
+"cookie@npm:^0.4.0, cookie@npm:^0.4.1":
   version: 0.4.1
   resolution: "cookie@npm:0.4.1"
   checksum: b8e0928e3e7aba013087974b33a6eec730b0a68b7ec00fc3c089a56ba2883bcf671252fc2ed64775aa1ca64796b6e1f6fdddba25a66808aef77614d235fd3e06
@@ -12821,7 +12857,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.1.0":
+"hoist-non-react-statics@npm:^3.0.0, hoist-non-react-statics@npm:^3.1.0, hoist-non-react-statics@npm:^3.3.0":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -19318,6 +19354,19 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"react-cookie@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "react-cookie@npm:4.1.1"
+  dependencies:
+    "@types/hoist-non-react-statics": ^3.0.1
+    hoist-non-react-statics: ^3.0.0
+    universal-cookie: ^4.0.0
+  peerDependencies:
+    react: ">= 16.3.0"
+  checksum: 0a011b7cbe8d72e5d3482708abe9a00616c18b2c6c6f4f911373d76f1307d6c3b2a5a096e855181009b3d6461ae587f27483820d511fdaaf2821d9daf54b1103
+  languageName: node
+  linkType: hard
+
 "react-dom@npm:16.13.1":
   version: 16.13.1
   resolution: "react-dom@npm:16.13.1"
@@ -23144,6 +23193,16 @@ resolve@^1.1.6:
     unist-util-is: ^4.0.0
     unist-util-visit-parents: ^3.0.0
   checksum: 7af837673e377693cf4c7bd966d5e088b52bd4a9c6e92f9b16ae5760a31243f627fbf3432ada6541e2b9091b8096007cb22aa8439cbbf04613898773743302d3
+  languageName: node
+  linkType: hard
+
+"universal-cookie@npm:^4.0.0":
+  version: 4.0.4
+  resolution: "universal-cookie@npm:4.0.4"
+  dependencies:
+    "@types/cookie": ^0.3.3
+    cookie: ^0.4.0
+  checksum: 182b97a2dd6a368f1940f8dd2d0ec3908f1add6f651a6bd30dac1a8083dd7f64c35e0a7fd4b3c923004f4fe85e838d2996bcd0057061a2f494782f65c2a105fc
   languageName: node
   linkType: hard
 

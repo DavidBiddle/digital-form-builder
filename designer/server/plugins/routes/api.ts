@@ -12,6 +12,16 @@ const getPublished = async function (id) {
   return payload.toString();
 };
 
+export const loginRedirect: ServerRoute = {
+  method: "GET",
+  path: "/api/login",
+  options: {
+    handler: (_, h) => {
+      return h.redirect(config.managementUrl);
+    },
+  },
+};
+
 export const getFormWithId: ServerRoute = {
   // GET DATA
   method: "GET",
@@ -19,14 +29,14 @@ export const getFormWithId: ServerRoute = {
   options: {
     handler: async (request, h) => {
       const { id } = request.params;
+      const { persistenceService } = request.services([]);
       let formJson = newFormJson;
       try {
-        const response = await getPublished(id);
-        const { values } = JSON.parse(response);
-
-        if (values) {
-          formJson = values;
-        }
+        const response = await persistenceService.getConfigurationForUser(
+          `${id}`,
+          request.state["user"]
+        );
+        formJson = JSON.parse(response);
       } catch (error) {
         request.logger.error(error);
       }
@@ -61,11 +71,22 @@ export const putFormWithId: ServerRoute = {
 
           throw new Error("Schema validation failed, reason: " + error.message);
         }
-        await persistenceService.uploadConfiguration(
-          `${id}`,
-          JSON.stringify(value)
-        );
-        await publish(id, value);
+
+        if (request.state["user"]) {
+          await persistenceService.uploadConfigurationForUser(
+            `${id}`,
+            JSON.stringify(value),
+            request.state["user"]
+          );
+        } else {
+          await persistenceService.uploadConfiguration(
+            `${id}`,
+            JSON.stringify(value)
+          );
+        }
+
+        // Remove publishing for now
+        // await publish(id, value);
         return h.response({ ok: true }).code(204);
       } catch (err) {
         request.logger.error("Designer Server PUT /api/{id}/data error:", err);
@@ -89,7 +110,16 @@ export const getAllPersistedConfigurations: ServerRoute = {
     handler: async (request, h): Promise<ResponseObject | undefined> => {
       const { persistenceService } = request.services([]);
       try {
-        const response = await persistenceService.listAllConfigurations();
+        let response;
+
+        if (request.state["user"]) {
+          response = await persistenceService.listAllConfigurationsForUser(
+            request.state["user"]
+          );
+        } else {
+          response = await persistenceService.listAllConfigurations();
+        }
+
         return h.response(response).type("application/json");
       } catch (error) {
         request.server.log(["error", "/configurations"], error);
