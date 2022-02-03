@@ -57,8 +57,18 @@ function useQuery() {
 }
 
 function AuthProvider({ children }) {
-  let [cookies] = useCookies(["user"]);
-  if (cookies.user) return children;
+  let [cookies, setCookie] = useCookies(["user"]);
+  let query = useQuery();
+
+  if (query.get("token")) {
+    setCookie("user", query.get("token"), {
+      path: "/",
+      sameSite: "strict",
+    });
+  }
+
+  if (cookies.user || query.get("token")) return children;
+
   window.location.href = "/api/login";
 }
 
